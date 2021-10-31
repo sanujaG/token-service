@@ -1,0 +1,121 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="now()" dbms="mysql,postgresql.h2"/>
+  <property name="dateType" value="DATETIME" dbms="mysql"/>
+  <property name="dateType" value="TIMESTAMP" dbms="h2"/>
+
+  <property name="jsonType" value="JSON" dbms="mysql"/>
+  <property name="jsonType" value="LONGTEXT" dbms="h2"/>
+
+  <property name="author-Sanuja" value="Sanuja Gamage"/>
+  <changeSet id="1" author="author-Sanuja">
+
+    <createTable tableName="oauth_client_details">
+      <column name="client_id" type="varchar(255)">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="client_secret" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="web_server_redirect_uri" type="varchar(2048)" defaultValue="null">
+      </column>
+      <column name="scope" type="varchar(255)" defaultValue="null">
+      </column>
+      <column name="access_token_validity" type="int(11)" defaultValue="null">
+      </column>
+      <column name="refresh_token_validity" type="int(11)" defaultValue="null">
+      </column>
+      <column name="resource_ids" type="varchar(1024)" defaultValue="null">
+      </column>
+      <column name="authorized_grant_types" type="varchar(1024)" defaultValue="null">
+      </column>
+      <column name="authorities" type="varchar(1024)" defaultValue="null">
+      </column>
+      <column name="additional_information" type="varchar(4096)" defaultValue="null">
+      </column>
+      <column name="autoapprove" type="varchar(255)" defaultValue="null">
+      </column>
+      <column name="status" type="varchar(8)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="oauth_client_details"/>
+    </rollback>
+
+    <createTable tableName="oauth_access_token">
+      <column name="authentication_id" type="varchar(256)">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="token_id" type="varchar(256)">
+      </column>
+      <column name="token" type="MEDIUMBLOB">
+      </column>
+      <column name="user_name" type="varchar(256)">
+      </column>
+      <column name="client_id" type="varchar(256)">
+      </column>
+      <column name="authentication" type="MEDIUMBLOB">
+      </column>
+      <column name="refresh_token" type="varchar(256)">
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="oauth_access_token"/>
+    </rollback>
+    <createTable tableName="oauth_refresh_token">
+      <column name="token_id" type="varchar(256)">
+      </column>
+      <column name="token" type="MEDIUMBLOB">
+      </column>
+      <column name="authentication" type="MEDIUMBLOB">
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="oauth_refresh_token"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="2.5" author="author-Sanuja">
+
+    <createTable tableName="user_detail">
+      <column name="ID" autoIncrement="true" type="int">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="USER_NAME" type="varchar(32)" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_KEY" type="varchar(255)" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="PASSWORD" type="varchar(255)" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="ATTEMPT" type="int" defaultValue="0" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="PASSWORD_EXPIRE_DATE" type="${dateType}" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="LAST_LOGGED_DATE" type="${dateType}" >
+      </column>
+      <column name="PASSWORD_STATUS" type="varchar(8)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STATUS" type="varchar(8)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CREATED_DATE" type="${dateType}" defaultValue="${now}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="MODIFIED_DATE" type="${dateType}" defaultValue="${now}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="user_detail"/>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>
